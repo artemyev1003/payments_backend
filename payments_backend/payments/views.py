@@ -1,12 +1,16 @@
 import stripe
 from django.conf import settings
 from django.http import JsonResponse
-from django.views.generic import DetailView
-from .models import Item
+from django.views.generic import DetailView, TemplateView
+from .models import Item, Order
 
 
 class ItemDetailView(DetailView):
     model = Item
+
+
+class OrderDetailView(DetailView):
+    model = Order
 
 
 def create_checkout_session(request, pk):
@@ -14,7 +18,7 @@ def create_checkout_session(request, pk):
         try:
             item = Item.objects.get(id=pk)
             stripe.api_key = settings.STRIPE_SECRET_KEY
-            domain_url = 'http://localhost:8000'
+            domain_url = settings.DOMAIN_NAME
             checkout_session = stripe.checkout.Session.create(
                 line_items=[
                     {
@@ -38,13 +42,49 @@ def create_checkout_session(request, pk):
             return JsonResponse({'error': str(e)})
 
 
+def create_checkout_session_order(request, pk):
+    if request.method == 'GET':
+        try:
+            order = Order.objects.get(id=pk)
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            domain_url = settings.DOMAIN_NAME
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': 'usd',
+                            'unit_amount': order.get_total_cost,
+                            'product_data': {
+                                'name': order.name,
+                                'description': order.description,
+                            }
+                        },
+                        'quantity': 1,
+                    },
+                ],
+                mode='payment',
+                success_url=domain_url + '/success/',
+                cancel_url=domain_url + '/cancelled/',
+            )
+            return JsonResponse({'sessionId': checkout_session['id']})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+
+
+
 def get_stripe_config(request):
     if request.method == 'GET':
         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
 
+class SuccessView(TemplateView):
+    template_name = 'payments/success.html'
 
+
+class CancelledView(TemplateView):
+    template_name = 'payments/cancelled.html'
 
 
 
@@ -98,12 +138,7 @@ class HomePageView(TemplateView):
     template_name = 'home.html'
 
 
-class SuccessView(TemplateView):
-    template_name = 'success.html'
 
-
-class CancelledView(TemplateView):
-    template_name = 'cancelled.html'
 
 
 @csrf_exempt
