@@ -23,7 +23,6 @@ class Item(models.Model):
     class Meta:
         verbose_name = _('item')
         verbose_name_plural = _('items')
-
         ordering = ['name']
 
 
@@ -37,6 +36,8 @@ class Discount(models.Model):
     class Meta:
         verbose_name = _('discount')
         verbose_name_plural = _('discounts')
+        ordering = ['name']
+
 
 
 class Tax(models.Model):
@@ -50,12 +51,10 @@ class Tax(models.Model):
     class Meta:
         verbose_name = _('tax')
         verbose_name_plural = _('taxes')
+        ordering = ['name']
 
 
 class Order(models.Model):
-    class Meta:
-        verbose_name = _('order')
-        verbose_name_plural = _('orders')
 
     class Currency(models.TextChoices):
         USD = 'usd'
@@ -83,6 +82,11 @@ class Order(models.Model):
     def get_display_total_cost(self):
         return '{0:.2f}'.format(self.get_total_cost / 100)
 
+    class Meta:
+        verbose_name = _('order')
+        verbose_name_plural = _('orders')
+        ordering = ['name']
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name=_('order'))
@@ -99,3 +103,7 @@ class OrderItem(models.Model):
     @property
     def get_display_cost(self):
         return '{0:.2f}'.format(self.get_cost / 100)
+
+    class Meta:
+        verbose_name = _('ordered item')
+        verbose_name_plural = _('ordered items')

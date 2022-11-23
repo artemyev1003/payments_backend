@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-v-wzm=+3kwysn#c@%no7d_qc_)z5c0pwti)s*_2d03%hg&32!2'
+
+# Value is loaded from the environment variable put into .env file and extracted
+# using load_dotenv() function of python-dotenv module
+
+load_dotenv()
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -76,12 +83,12 @@ WSGI_APPLICATION = 'payments_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'payments',
-        'USER': 'newuser',
-        'PASSWORD': 'newuser',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -128,7 +135,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']  # new
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51M5wWFK0u11E1fpofVPbOAiMUtydSVk3eA0kzjMzfMHz5gL9rmErd2xmgHm68poh25RtMOHDOOeplUZSNzYcuG7200Rqm8Ce09'
-STRIPE_SECRET_KEY = 'sk_test_51M5wWFK0u11E1fpoO5BOefh5lAghXE2o4ZDRDGMVVchYGV1XBYKsJzJH9JcrIjCaXxmGwQtocw7caqyWFNdrdnv800d9CH5Lsf'
-# STRIPE_ENDPOINT_SECRET = 'whsec_a1adf1e3ed453ce7478c3a663930dda80b3ec2336fadf6a24ea60d05c272d90a'
-DOMAIN_NAME = 'http://localhost:8000'
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+DOMAIN_NAME = os.getenv('DOMAIN_NAME')
