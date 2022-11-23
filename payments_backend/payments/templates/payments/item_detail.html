@@ -15,7 +15,7 @@
   <h1>{{ item.name }}</h1>
   <p>Description of {{ item.name }}</p>
   <p>{{ item.description }}</p>
-  <p>${{ item.get_display_price }}</p>
+  <p>{{ item.get_display_price }} {{ item.currency }}</p>
   <div class="container">
     <button class="button is-primary" id="submitBtn">Buy</button>
   </div>

@@ -23,7 +23,7 @@ def create_checkout_session(request, pk):
                 line_items=[
                     {
                         'price_data': {
-                            'currency': 'usd',
+                            'currency': item.currency,
                             'unit_amount': item.price,
                             'product_data': {
                                 'name': item.name,
@@ -48,11 +48,29 @@ def create_checkout_session_order(request, pk):
             order = Order.objects.get(id=pk)
             stripe.api_key = settings.STRIPE_SECRET_KEY
             domain_url = settings.DOMAIN_NAME
+
+            if order.discount:
+                order_discount = stripe.Coupon.create(
+                    percent_off=order.discount.percent_off,
+                )
+            else:
+                order_discount = None
+
+            if order.tax:
+                order_tax = stripe.TaxRate.create(
+                    display_name=order.tax.name,
+                    percentage=order.tax.percentage,
+                    inclusive=order.tax.inclusive,
+                )
+                order_tax_id = [order_tax.id]
+            else:
+                order_tax_id = []
+
             checkout_session = stripe.checkout.Session.create(
                 line_items=[
                     {
                         'price_data': {
-                            'currency': 'usd',
+                            'currency': order.currency,
                             'unit_amount': order.get_total_cost,
                             'product_data': {
                                 'name': order.name,
@@ -60,17 +78,19 @@ def create_checkout_session_order(request, pk):
                             }
                         },
                         'quantity': 1,
+                        'tax_rates': order_tax_id,
                     },
                 ],
                 mode='payment',
+                discounts=[{
+                    'coupon': order_discount,
+                }],
                 success_url=domain_url + '/success/',
                 cancel_url=domain_url + '/cancelled/',
             )
             return JsonResponse({'sessionId': checkout_session['id']})
         except Exception as e:
             return JsonResponse({'error': str(e)})
-
-
 
 
 def get_stripe_config(request):

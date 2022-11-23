@@ -17,10 +17,11 @@
   <p>{{ order.description }}</p>
   <ol>
   {% for oi in order.orderitem_set.all %}
-  <li> {{ oi.item.name }} x {{ oi.quantity }} ($ {{ oi.get_display_cost }}) </li>
+  <li> {{ oi.item.name }} x {{ oi.quantity }} ({{ oi.get_display_cost }}
+    {{oi.item.currency}}) </li>
   {% endfor %}
   </ol>
-  <p><strong>Total: $ {{ order.get_display_total_cost }}</strong></p>
+  <p><strong>Total: {{ order.get_display_total_cost }} {{ order.currency }}</strong></p>
   <br/>
   <div class="container">
     <button class="button is-primary" id="submitBtn">Buy</button>
