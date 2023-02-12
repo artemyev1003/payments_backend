@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Value is loaded from the environment variable put into .env file and extracted
 # using load_dotenv() function of python-dotenv module
 
-load_dotenv()
+load_dotenv('payments_backend/.env.sample')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!

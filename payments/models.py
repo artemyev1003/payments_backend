@@ -39,7 +39,6 @@ class Discount(models.Model):
         ordering = ['name']
 
 
-
 class Tax(models.Model):
     name = models.CharField(_('name'), max_length=255, null=True)
     percentage = models.DecimalField(_('percentage'), max_digits=6, decimal_places=4)
@@ -69,7 +68,6 @@ class Order(models.Model):
                             null=True, verbose_name=_('tax'))
     currency = models.CharField(_('currency'), max_length=20,
                                 choices=Currency.choices, default=Currency.USD)
-
 
     def __str__(self):
         return self.name
