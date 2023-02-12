@@ -1,15 +1,14 @@
 services:
   db:
     image: postgres
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
+#    volumes:
+#      - ./data/db:/var/lib/postgresql/data
     env_file:
       - payments_backend/.env.sample
     ports:
       - "5432:5432"
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
@@ -18,3 +17,4 @@ services:
       - payments_backend/.env.sample
     depends_on:
       - db
+    entrypoint: /entrypoint.sh
