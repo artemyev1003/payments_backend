@@ -6,14 +6,26 @@ from .models import Item, Order
 
 
 class ItemDetailView(DetailView):
+    """
+    Returns HTML page with the information about the selected item (passed by id)
+    and the 'Buy' button.
+    """
     model = Item
 
 
 class OrderDetailView(DetailView):
+    """
+    Returns HTML page with the information about the selected order (passed by id)
+    and the 'Buy' button.
+    """
     model = Order
 
 
 def create_checkout_session(request, pk):
+    """
+    Returns json with Stripe API (https://stripe.com/docs/api) checkout session id
+    for product or error if something went wrong.
+    """
     if request.method == 'GET':
         try:
             item = Item.objects.get(id=pk)
@@ -43,6 +55,10 @@ def create_checkout_session(request, pk):
 
 
 def create_checkout_session_order(request, pk):
+    """
+    Returns json with Stripe API (https://stripe.com/docs/api) checkout session id
+    for order or error if something went wrong.
+    """
     if request.method == 'GET':
         try:
             order = Order.objects.get(id=pk)
@@ -94,14 +110,21 @@ def create_checkout_session_order(request, pk):
 
 
 def get_stripe_config(request):
+    """
+    Returns json with Stripe API public key.
+    """
     if request.method == 'GET':
         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
 
 class SuccessView(TemplateView):
+    """Generates a page where users are redirected after
+    successful payment."""
     template_name = 'payments/success.html'
 
 
 class CancelledView(TemplateView):
+    """Generates a page where users are redirected after
+    failed payment."""
     template_name = 'payments/cancelled.html'

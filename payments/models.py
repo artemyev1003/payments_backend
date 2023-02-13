@@ -18,6 +18,8 @@ class Item(models.Model):
         return self.name
 
     def get_display_price(self):
+        """Returns price in USD/RUB to display on a webpage.
+        Calculated as price in cents/kopecks divided by 100"""
         return '{0:.2f}'.format(self.price / 100)
 
     class Meta:
@@ -74,10 +76,13 @@ class Order(models.Model):
 
     @property
     def get_total_cost(self):
+        """Total cost of all items in the order."""
         return sum(oi.get_cost for oi in self.orderitem_set.all())
 
     @property
     def get_display_total_cost(self):
+        """Returns total cost of the order in USD/RUB to display on a webpage.
+        Calculated as cost in cents/kopecks divided by 100"""
         return '{0:.2f}'.format(self.get_total_cost / 100)
 
     class Meta:
@@ -96,10 +101,13 @@ class OrderItem(models.Model):
 
     @property
     def get_cost(self):
+        """Calculates cost by multipying item's price by its quantity."""
         return self.item.price * self.quantity
 
     @property
     def get_display_cost(self):
+        """Returns total cost of items in USD/RUB to display on a webpage.
+        Calculated as cost in cents/kopecks divided by 100"""
         return '{0:.2f}'.format(self.get_cost / 100)
 
     class Meta:
