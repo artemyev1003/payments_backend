@@ -7,28 +7,28 @@ def create_items(apps, schema_editor):
     Item = apps.get_model("payments", "Item")
     item_1 = Item(name="Tea",
                   description="Tasty black tea",
-                  price=100,
+                  price=10000,
                   currency="rub"
                   )
     item_1.save()
 
     item_2 = Item(name="Coffee",
                   description="Coffee from Ethiopia",
-                  price=500,
+                  price=50000,
                   currency="rub"
                   )
     item_2.save()
 
     item_3 = Item(name="Chocolate",
                   description="Mars chocolate bar",
-                  price=2,
+                  price=200,
                   currency="usd"
                   )
     item_3.save()
 
     item_4 = Item(name="Lemonade",
                   description="Coca-Cola 2 litres bottle",
-                  price=3,
+                  price=300,
                   currency="usd"
                   )
     item_4.save()
