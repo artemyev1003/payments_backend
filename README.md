@@ -39,7 +39,7 @@ cd payments-test-assignment
 ``` 
 2. Собираем и запускаем проект:
 ```sh
-docker-compose up -- build
+docker-compose up --build
 ```
 Формируются 2 контейнера - с Django-приложением и с БД PostreSQL. 
 Для удобства тестирования приложения при первом запуске контейнера создается суперпользователь
