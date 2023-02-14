@@ -35,7 +35,7 @@ Stripe (https://stripe.com/docs).
 1. Копируем репозиторий и переходим в директорию проекта
 ```sh 
 git clone git@github.com:artemyev1003/payments_backend.git
-cd payments-test-assignment
+cd payments_backend
 ``` 
 2. Собираем и запускаем проект:
 ```sh
