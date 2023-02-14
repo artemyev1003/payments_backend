@@ -34,7 +34,7 @@ Stripe (https://stripe.com/docs).
 ### Запуск проекта
 1. Копируем репозиторий и переходим в директорию проекта
 ```sh 
-git clone https://github.com/artemyev1003/payments-test-assignment.git
+git clone git@github.com:artemyev1003/payments_backend.git
 cd payments-test-assignment
 ``` 
 2. Собираем и запускаем проект:
